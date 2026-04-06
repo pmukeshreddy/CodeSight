@@ -1,8 +1,8 @@
 # CodeSight 
 
-**Agentic Review Engine for Software** -- an AI code review pipeline that generates verified, evidence-backed review comments on real-world pull requests.
+**CodeSight** -- an AI code review pipeline that generates verified, evidence-backed review comments on real-world pull requests.
 
-ARES doesn't just find issues -- it generates fixes, writes regression tests, runs them, and only posts comments that survive a multi-stage verification pipeline.
+CodeSight doesn't just find issues -- it generates fixes, writes regression tests, runs them, and only posts comments that survive a multi-stage verification pipeline.
 
 ---
 
