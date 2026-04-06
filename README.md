@@ -1,4 +1,4 @@
-# CodeSight / ARES
+# CodeSight 
 
 **Agentic Review Engine for Software** -- an AI code review pipeline that generates verified, evidence-backed review comments on real-world pull requests.
 
