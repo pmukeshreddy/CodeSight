@@ -1,0 +1,283 @@
+<svg width="1800" height="1120" viewBox="0 0 1800 1120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="80" x2="1680" y2="1040" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F7FAFC"/>
+      <stop offset="1" stop-color="#FFF7ED"/>
+    </linearGradient>
+    <linearGradient id="panelBlue" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#EFF6FF"/>
+      <stop offset="1" stop-color="#DBEAFE"/>
+    </linearGradient>
+    <linearGradient id="panelSand" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#FFFBEB"/>
+      <stop offset="1" stop-color="#FDE68A"/>
+    </linearGradient>
+    <linearGradient id="panelMint" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#ECFDF5"/>
+      <stop offset="1" stop-color="#D1FAE5"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-opacity="0.12" flood-color="#0F172A"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+    </marker>
+    <style>
+      .title { font: 700 34px 'IBM Plex Sans', Arial, sans-serif; fill: #0F172A; }
+      .subtitle { font: 500 16px 'IBM Plex Sans', Arial, sans-serif; fill: #475569; }
+      .panel-title { font: 700 22px 'IBM Plex Sans', Arial, sans-serif; fill: #0F172A; }
+      .panel-copy { font: 500 14px 'IBM Plex Sans', Arial, sans-serif; fill: #475569; }
+      .card-title { font: 700 18px 'IBM Plex Sans', Arial, sans-serif; fill: #0F172A; }
+      .card-copy { font: 500 13px 'IBM Plex Sans', Arial, sans-serif; fill: #334155; }
+      .chip { font: 700 11px 'IBM Plex Sans', Arial, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; fill: #1E293B; }
+      .edge { stroke: #334155; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#arrow); }
+      .edge-soft { stroke: #64748B; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#arrow); }
+      .edge-dashed { stroke: #475569; stroke-width: 2.5; stroke-dasharray: 10 8; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#arrow); fill: none; }
+      .edge-label { font: 600 12px 'IBM Plex Sans', Arial, sans-serif; fill: #475569; }
+      .small { font: 500 12px 'IBM Plex Sans', Arial, sans-serif; fill: #475569; }
+    </style>
+  </defs>
+
+  <rect width="1800" height="1120" fill="url(#bg)"/>
+  <rect x="32" y="32" width="1736" height="1056" rx="28" fill="#FFFFFF" opacity="0.72"/>
+
+  <text x="64" y="84" class="title">ARES Current Architecture</text>
+  <text x="64" y="114" class="subtitle">Derived from the live repository structure: indexing, PR review orchestration, feedback learning, and historical evaluation.</text>
+
+  <rect x="40" y="150" width="320" height="930" rx="28" fill="url(#panelBlue)" stroke="#93C5FD" stroke-width="2" filter="url(#shadow)"/>
+  <text x="68" y="192" class="panel-title">Inputs and External Systems</text>
+  <text x="68" y="216" class="panel-copy">Everything ARES reads from or writes to during normal runs.</text>
+
+  <rect x="390" y="150" width="950" height="930" rx="28" fill="#FFFDF7" stroke="#FBBF24" stroke-width="2" filter="url(#shadow)"/>
+  <text x="418" y="192" class="panel-title">Core Review Runtime</text>
+  <text x="418" y="216" class="panel-copy">Pipeline orchestration, graph-based targeting, review loop, validation, and final comment assembly.</text>
+
+  <rect x="1370" y="150" width="390" height="930" rx="28" fill="url(#panelMint)" stroke="#6EE7B7" stroke-width="2" filter="url(#shadow)"/>
+  <text x="1398" y="192" class="panel-title">Feedback and Evaluation</text>
+  <text x="1398" y="216" class="panel-copy">Persistence, strategy updates, vector memory, and offline PR sampling.</text>
+
+  <rect x="64" y="250" width="272" height="92" rx="22" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="2"/>
+  <text x="88" y="283" class="chip">entrypoints</text>
+  <text x="88" y="308" class="card-title">CLI and scripts</text>
+  <text x="88" y="330" class="card-copy">`python -m ares.pipeline`</text>
+  <text x="88" y="348" class="card-copy">`scripts/eval_comment_sample.py`</text>
+
+  <rect x="64" y="372" width="272" height="88" rx="22" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="2"/>
+  <text x="88" y="404" class="chip">config</text>
+  <text x="88" y="429" class="card-title">AresConfig + env keys</text>
+  <text x="88" y="451" class="card-copy">Provider, model, GitHub, Pinecone, caps, workspace.</text>
+
+  <rect x="64" y="490" width="272" height="104" rx="22" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="2"/>
+  <text x="88" y="522" class="chip">external api</text>
+  <text x="88" y="547" class="card-title">GitHub</text>
+  <text x="88" y="569" class="card-copy">PR metadata, files, diffs, review threads,</text>
+  <text x="88" y="587" class="card-copy">comment posting, and commit history.</text>
+
+  <rect x="64" y="626" width="272" height="104" rx="22" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="2"/>
+  <text x="88" y="658" class="chip">repo state</text>
+  <text x="88" y="683" class="card-title">Local clone / worktree</text>
+  <text x="88" y="705" class="card-copy">Base branch clone, PR head checkout,</text>
+  <text x="88" y="723" class="card-copy">changed files, source snapshots.</text>
+
+  <rect x="64" y="762" width="272" height="88" rx="22" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="2"/>
+  <text x="88" y="794" class="chip">llm backend</text>
+  <text x="88" y="819" class="card-title">OpenAI / Anthropic</text>
+  <text x="88" y="841" class="card-copy">Accessed through `LLMAdapter`.</text>
+
+  <rect x="64" y="882" width="272" height="92" rx="22" fill="#FFFFFF" stroke="#BFDBFE" stroke-width="2"/>
+  <text x="88" y="914" class="chip">vector memory</text>
+  <text x="88" y="939" class="card-title">Pinecone</text>
+  <text x="88" y="961" class="card-copy">Stores upvote/downvote feedback and</text>
+  <text x="88" y="979" class="card-copy">filters repeated low-value comments.</text>
+
+  <rect x="430" y="252" width="870" height="84" rx="24" fill="#FFFFFF" stroke="#FCD34D" stroke-width="2"/>
+  <text x="458" y="284" class="chip">orchestrator</text>
+  <text x="458" y="309" class="card-title">Pipeline</text>
+  <text x="458" y="331" class="card-copy">Wires GitHubClient, PineconeClient, ReviewStrategy, graph services, agent stages, static analysis, and eval support.</text>
+
+  <rect x="430" y="372" width="220" height="120" rx="22" fill="#FFFFFF" stroke="#FCD34D" stroke-width="2"/>
+  <text x="454" y="404" class="chip">integration</text>
+  <text x="454" y="429" class="card-title">GitHubClient</text>
+  <text x="454" y="451" class="card-copy">Clones refs, fetches PR diffs, lists</text>
+  <text x="454" y="469" class="card-copy">merged PRs, loads review ground truth.</text>
+
+  <rect x="690" y="372" width="220" height="120" rx="22" fill="#FFFFFF" stroke="#FCD34D" stroke-width="2"/>
+  <text x="714" y="404" class="chip">indexing</text>
+  <text x="714" y="429" class="card-title">RepositoryIndexer</text>
+  <text x="714" y="451" class="card-copy">`RepoParser` builds AST graph and</text>
+  <text x="714" y="469" class="card-copy">`NodeClassifier` enriches risk metadata.</text>
+
+  <rect x="950" y="388" width="160" height="88" rx="20" fill="#FEFCE8" stroke="#F59E0B" stroke-width="2"/>
+  <text x="974" y="420" class="chip">state</text>
+  <text x="974" y="445" class="card-title">`.ares/graph.pkl`</text>
+  <text x="974" y="467" class="card-copy">Reusable graph store.</text>
+
+  <rect x="1150" y="372" width="150" height="120" rx="22" fill="#FFFFFF" stroke="#FCD34D" stroke-width="2"/>
+  <text x="1174" y="404" class="chip">targeting</text>
+  <text x="1174" y="429" class="card-title">GraphQuery</text>
+  <text x="1174" y="451" class="card-copy">Ranks changed nodes by</text>
+  <text x="1174" y="469" class="card-copy">risk, callers, and change type.</text>
+
+  <rect x="430" y="540" width="220" height="112" rx="22" fill="#FFFFFF" stroke="#FCD34D" stroke-width="2"/>
+  <text x="454" y="572" class="chip">fast path</text>
+  <text x="454" y="597" class="card-title">StaticAnalyzer</text>
+  <text x="454" y="619" class="card-copy">Runs `ruff` and `semgrep` on changed</text>
+  <text x="454" y="637" class="card-copy">files and emits high-signal findings.</text>
+
+  <rect x="690" y="540" width="230" height="112" rx="22" fill="#FFFFFF" stroke="#FCD34D" stroke-width="2"/>
+  <text x="714" y="572" class="chip">context assembly</text>
+  <text x="714" y="597" class="card-title">Investigator</text>
+  <text x="714" y="619" class="card-copy">Parses diff hunks, infers PR intent,</text>
+  <text x="714" y="637" class="card-copy">and formats caller/callee/test context.</text>
+
+  <rect x="960" y="540" width="160" height="96" rx="22" fill="#FFFFFF" stroke="#FCD34D" stroke-width="2"/>
+  <text x="984" y="572" class="chip">agent</text>
+  <text x="984" y="597" class="card-title">Reviewer</text>
+  <text x="984" y="619" class="card-copy">Generates candidate</text>
+  <text x="984" y="637" class="card-copy">review comments.</text>
+
+  <rect x="1150" y="528" width="160" height="120" rx="22" fill="#FFFFFF" stroke="#FCD34D" stroke-width="2"/>
+  <text x="1174" y="560" class="chip">agent</text>
+  <text x="1174" y="585" class="card-title">Verifier</text>
+  <text x="1174" y="607" class="card-copy">Tries minimal fixes,</text>
+  <text x="1174" y="625" class="card-copy">compiles/tests patches,</text>
+  <text x="1174" y="643" class="card-copy">and bundle-checks survivors.</text>
+
+  <rect x="910" y="700" width="180" height="108" rx="22" fill="#FFFFFF" stroke="#FCD34D" stroke-width="2"/>
+  <text x="934" y="732" class="chip">agent</text>
+  <text x="934" y="757" class="card-title">Critic</text>
+  <text x="934" y="779" class="card-copy">Scores comments, filters nits,</text>
+  <text x="934" y="797" class="card-copy">and consults vector memory.</text>
+
+  <rect x="1130" y="700" width="180" height="108" rx="22" fill="#FFFFFF" stroke="#FCD34D" stroke-width="2"/>
+  <text x="1154" y="732" class="chip">selection</text>
+  <text x="1154" y="757" class="card-title">Ranker</text>
+  <text x="1154" y="779" class="card-copy">Merges static + LLM streams,</text>
+  <text x="1154" y="797" class="card-copy">deduplicates, formats GitHub bodies.</text>
+
+  <rect x="690" y="860" width="620" height="132" rx="24" fill="#FFFFFF" stroke="#F59E0B" stroke-width="2"/>
+  <text x="718" y="892" class="chip">output</text>
+  <text x="718" y="917" class="card-title">Final review bundle</text>
+  <text x="718" y="939" class="card-copy">Final comments after ranking and bundle verification, including suggestion blocks when a fix validates cleanly.</text>
+  <text x="718" y="961" class="card-copy">Also captures review-loop metrics such as pass history, survivor counts, and bundle drop counts.</text>
+
+  <rect x="1398" y="262" width="334" height="108" rx="22" fill="#FFFFFF" stroke="#86EFAC" stroke-width="2"/>
+  <text x="1422" y="294" class="chip">persistence</text>
+  <text x="1422" y="319" class="card-title">FeedbackCollector</text>
+  <text x="1422" y="341" class="card-copy">Records posted comments and later checks</text>
+  <text x="1422" y="359" class="card-copy">whether GitHub commits addressed them.</text>
+
+  <rect x="1398" y="406" width="334" height="96" rx="22" fill="#FFFFFF" stroke="#86EFAC" stroke-width="2"/>
+  <text x="1422" y="438" class="chip">state</text>
+  <text x="1422" y="463" class="card-title">Feedback JSON in `.ares/`</text>
+  <text x="1422" y="485" class="card-copy">`feedback_pending.json` and `feedback_outcomes.json`</text>
+
+  <rect x="1398" y="538" width="334" height="108" rx="22" fill="#FFFFFF" stroke="#86EFAC" stroke-width="2"/>
+  <text x="1422" y="570" class="chip">adaptation</text>
+  <text x="1422" y="595" class="card-title">FeedbackLearner</text>
+  <text x="1422" y="617" class="card-copy">Aggregates addressed/ignored outcomes and</text>
+  <text x="1422" y="635" class="card-copy">asks the LLM for small strategy updates.</text>
+
+  <rect x="1398" y="682" width="334" height="108" rx="22" fill="#FFFFFF" stroke="#86EFAC" stroke-width="2"/>
+  <text x="1422" y="714" class="chip">strategy</text>
+  <text x="1422" y="739" class="card-title">ReviewStrategy</text>
+  <text x="1422" y="761" class="card-copy">Thresholds, blast-radius rules, learned</text>
+  <text x="1422" y="779" class="card-copy">nit/good patterns, and extra instructions.</text>
+
+  <rect x="1398" y="826" width="334" height="158" rx="22" fill="#FFFFFF" stroke="#86EFAC" stroke-width="2"/>
+  <text x="1422" y="858" class="chip">offline eval</text>
+  <text x="1422" y="883" class="card-title">Evaluator + comment sampler</text>
+  <text x="1422" y="905" class="card-copy">Runs `pipeline.review_pr()` on historical PRs,</text>
+  <text x="1422" y="923" class="card-copy">prefilters merged PRs, reuses a shared base graph,</text>
+  <text x="1422" y="941" class="card-copy">and compares generated comments with human review</text>
+  <text x="1422" y="959" class="card-copy">threads to compute precision, address rate, and</text>
+  <text x="1422" y="977" class="card-copy">verified-rate metrics.</text>
+
+  <path d="M336 296 C372 296 390 292 430 292" class="edge"/>
+  <text x="360" y="280" class="edge-label">command</text>
+  <path d="M336 416 C372 416 390 312 430 312" class="edge-soft"/>
+  <text x="352" y="358" class="edge-label">settings</text>
+
+  <path d="M336 542 C392 542 386 432 430 432" class="edge"/>
+  <text x="354" y="514" class="edge-label">PR data</text>
+  <path d="M336 678 C392 678 396 452 430 452" class="edge-soft"/>
+  <text x="350" y="651" class="edge-label">clone target</text>
+
+  <path d="M650 432 L690 432" class="edge"/>
+  <text x="660" y="416" class="edge-label">checkout</text>
+  <path d="M910 432 L950 432" class="edge"/>
+  <text x="922" y="416" class="edge-label">save/load</text>
+  <path d="M1110 432 L1150 432" class="edge"/>
+  <text x="1112" y="416" class="edge-label">queryable graph</text>
+
+  <path d="M540 594 C600 594 624 594 690 594" class="edge"/>
+  <text x="592" y="578" class="edge-label">changed files</text>
+  <path d="M1225 492 C1225 518 1220 525 1230 528" class="edge-soft"/>
+  <text x="1242" y="516" class="edge-label">targets + context</text>
+
+  <path d="M810 492 C810 518 794 528 782 540" class="edge-soft"/>
+  <text x="732" y="516" class="edge-label">diff hunks</text>
+
+  <path d="M920 594 L960 594" class="edge"/>
+  <text x="924" y="578" class="edge-label">review targets</text>
+  <path d="M1120 594 L1150 594" class="edge"/>
+  <text x="1127" y="578" class="edge-label">candidate fixes</text>
+
+  <path d="M1230 648 C1230 676 1180 694 1090 736" class="edge"/>
+  <text x="1160" y="676" class="edge-label">verified candidates</text>
+  <path d="M1090 754 C1110 754 1112 754 1130 754" class="edge"/>
+  <text x="1092" y="738" class="edge-label">selected survivors</text>
+  <path d="M1220 808 C1220 838 1190 860 1160 860" class="edge"/>
+  <text x="1218" y="836" class="edge-label">GitHub-ready comments</text>
+
+  <path d="M1000 700 C1000 670 960 650 960 594" class="edge-dashed"/>
+  <text x="890" y="666" class="edge-label">critique and refine</text>
+
+  <path d="M336 806 C610 806 760 806 960 618" class="edge-soft"/>
+  <text x="536" y="790" class="edge-label">LLMAdapter</text>
+  <path d="M336 818 C760 818 980 818 1170 642" class="edge-soft"/>
+  <path d="M336 830 C880 830 1120 830 980 748" class="edge-soft"/>
+  <path d="M336 842 C980 842 1300 842 1398 592" class="edge-soft"/>
+
+  <path d="M336 928 C720 928 790 928 910 768" class="edge-soft"/>
+  <text x="604" y="912" class="edge-label">similar feedback memory</text>
+  <path d="M336 940 C980 940 1280 940 1398 316" class="edge-soft"/>
+
+  <path d="M1310 916 C1360 916 1358 316 1398 316" class="edge"/>
+  <text x="1330" y="604" class="edge-label" transform="rotate(-90 1330 604)">posted comments</text>
+  <path d="M336 552 C1260 552 1310 552 1398 314" class="edge-dashed"/>
+  <text x="1260" y="536" class="edge-label">outcome checks</text>
+
+  <path d="M1565 370 L1565 406" class="edge"/>
+  <text x="1574" y="392" class="edge-label">record</text>
+  <path d="M1565 502 L1565 538" class="edge"/>
+  <text x="1574" y="524" class="edge-label">aggregate</text>
+  <path d="M1565 646 L1565 682" class="edge"/>
+  <text x="1574" y="668" class="edge-label">save</text>
+
+  <path d="M1398 736 C1320 736 1320 304 1300 304" class="edge-dashed"/>
+  <text x="1312" y="520" class="edge-label" transform="rotate(-90 1312 520)">reload thresholds and instructions</text>
+
+  <path d="M1398 900 C1320 900 1320 292 1300 292" class="edge-dashed"/>
+  <text x="1310" y="680" class="edge-label" transform="rotate(-90 1310 680)">calls Pipeline.review_pr()</text>
+  <path d="M336 530 C1180 530 1348 890 1398 890" class="edge-dashed"/>
+  <text x="1160" y="512" class="edge-label">human review ground truth</text>
+
+  <rect x="70" y="1012" width="250" height="40" rx="20" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+  <circle cx="94" cy="1032" r="7" fill="#DBEAFE" stroke="#60A5FA" stroke-width="1.5"/>
+  <text x="110" y="1037" class="small">External systems / inputs</text>
+
+  <rect x="338" y="1012" width="230" height="40" rx="20" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+  <circle cx="362" cy="1032" r="7" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+  <text x="378" y="1037" class="small">Runtime components</text>
+
+  <rect x="586" y="1012" width="264" height="40" rx="20" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5"/>
+  <circle cx="610" cy="1032" r="7" fill="#D1FAE5" stroke="#10B981" stroke-width="1.5"/>
+  <text x="626" y="1037" class="small">Feedback / evaluation state</text>
+
+  <path d="M870 1032 H930" class="edge"/>
+  <text x="944" y="1037" class="small">main runtime flow</text>
+
+  <path d="M1110 1032 H1170" class="edge-dashed"/>
+  <text x="1184" y="1037" class="small">adaptive or offline loop</text>
+</svg>

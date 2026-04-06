@@ -1,0 +1,74 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="40" x2="1480" y2="860" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FAFC"/>
+      <stop offset="1" stop-color="#FFFDF4"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#0F172A" flood-opacity="0.07"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+    </marker>
+    <style>
+      .title { font: 700 44px 'IBM Plex Sans', Arial, sans-serif; fill: #0F172A; }
+      .subtitle { font: 500 20px 'IBM Plex Sans', Arial, sans-serif; fill: #475569; }
+      .chip { font: 700 12px 'IBM Plex Sans', Arial, sans-serif; fill: #64748B; letter-spacing: 0.10em; text-transform: uppercase; }
+      .box-title { font: 700 30px 'IBM Plex Sans', Arial, sans-serif; fill: #0F172A; }
+      .box-copy { font: 500 18px 'IBM Plex Sans', Arial, sans-serif; fill: #334155; }
+      .decision { font: 700 24px 'IBM Plex Sans', Arial, sans-serif; fill: #0F172A; }
+      .formula { font: 700 36px 'IBM Plex Sans', Arial, sans-serif; fill: #0F172A; }
+      .formula-copy { font: 500 18px 'IBM Plex Sans', Arial, sans-serif; fill: #334155; }
+      .edge { stroke: #334155; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#arrow); fill: none; }
+      .edge-soft { stroke: #64748B; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#arrow); fill: none; }
+      .edge-label { font: 700 15px 'IBM Plex Sans', Arial, sans-serif; fill: #475569; }
+      .note { font: 600 16px 'IBM Plex Sans', Arial, sans-serif; fill: #64748B; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect x="28" y="24" width="1544" height="852" rx="34" fill="#FFFFFF" opacity="0.88"/>
+
+  <text x="72" y="96" class="title">Review REPL to Address Rate</text>
+  <text x="72" y="132" class="subtitle">Minimal flow chart: keep only the path that matters for `address_rate`.</text>
+
+  <rect x="92" y="292" width="340" height="170" rx="28" fill="#FFFFFF" stroke="#FBBF24" stroke-width="3" filter="url(#shadow)"/>
+  <text x="126" y="332" class="chip">loop</text>
+  <text x="126" y="376" class="box-title">_run_review_repl()</text>
+  <text x="126" y="410" class="box-copy">reviewer -> verifier -> critic</text>
+  <text x="126" y="438" class="box-copy">repeat until stop</text>
+
+  <rect x="516" y="316" width="250" height="122" rx="26" fill="#FFFFFF" stroke="#F59E0B" stroke-width="3" filter="url(#shadow)"/>
+  <text x="548" y="352" class="chip">output</text>
+  <text x="548" y="392" class="box-title">Final comments</text>
+  <text x="548" y="420" class="box-copy">rank + bundle check</text>
+
+  <polygon points="970,274 1070,374 970,474 870,374" fill="#FFFFFF" stroke="#6EE7B7" stroke-width="3"/>
+  <text x="970" y="368" text-anchor="middle" class="decision">Human match?</text>
+
+  <polygon points="1258,274 1358,374 1258,474 1158,374" fill="#FFFFFF" stroke="#6EE7B7" stroke-width="3"/>
+  <text x="1258" y="368" text-anchor="middle" class="decision">Addressed?</text>
+
+  <rect x="798" y="640" width="684" height="140" rx="28" fill="#FFFFFF" stroke="#10B981" stroke-width="3.5" filter="url(#shadow)"/>
+  <text x="836" y="680" class="chip">metric</text>
+  <text x="836" y="726" class="formula">address_rate = addressed / generated</text>
+  <text x="836" y="756" class="formula-copy">generated = final comments</text>
+  <text x="836" y="782" class="formula-copy">addressed = matched comments later fixed</text>
+
+  <path d="M432 377 L516 377" class="edge"/>
+  <path d="M766 377 L870 377" class="edge"/>
+  <path d="M1070 374 L1158 374" class="edge"/>
+  <text x="1092" y="348" class="edge-label">Yes</text>
+
+  <path d="M650 462 C650 530 304 530 304 462" class="edge-soft"/>
+  <text x="418" y="510" class="edge-label">loop until stop</text>
+
+  <path d="M1260 474 C1260 544 1168 640 1124 640" class="edge"/>
+  <text x="1280" y="548" class="edge-label">Yes: addressed</text>
+
+  <path d="M640 438 C640 530 960 530 960 640" class="edge-soft"/>
+  <text x="708" y="520" class="edge-label">generated</text>
+
+  <text x="1048" y="390" class="note">No -> not addressed</text>
+  <text x="1338" y="390" class="note">No -> not addressed</text>
+</svg>

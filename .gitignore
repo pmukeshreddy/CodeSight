@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.ares-workdir/
+.ares/
+*.egg-info/
+dist/
+build/
+.env
+.env.local
+*.db
+.DS_Store
+/tmp/
