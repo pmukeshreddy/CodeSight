@@ -1,20 +1,22 @@
 # CodeSight / ARES
 
-**Agentic Review Engine for Software** -- an AI code review pipeline that achieves **58.3% address rate** on real-world pull requests, outperforming CodeRabbit's 49% benchmark precision (Martian Code Review Bench, 2026).
+**Agentic Review Engine for Software** -- an AI code review pipeline that generates verified, evidence-backed review comments on real-world pull requests.
 
-ARES doesn't just find issues -- it generates fixes, writes regression tests, runs them, and only posts comments that survive a multi-stage verification pipeline. Every comment is backed by evidence.
+ARES doesn't just find issues -- it generates fixes, writes regression tests, runs them, and only posts comments that survive a multi-stage verification pipeline.
 
 ---
 
 ## Results
 
-| Metric | ARES | CodeRabbit | Qodo | Atlassian RovoDev |
-|--------|------|------------|------|-------------------|
-| **Address Rate / Precision** | **58.3%** | 49.2% | -- | 38.7% |
-| **Verified Rate** | **100%** | -- | -- | -- |
-| **Cost per PR** | ~$0.20 | -- | -- | -- |
+| Metric | Value |
+|--------|-------|
+| **Address Rate** | **58.3%** |
+| **Precision** | **58.3%** |
+| **Plausible Rate** | **41.7%** |
+| **Verified Rate** | **100%** |
+| **Cost per PR** | **~$0.20** |
 
-> Evaluated on 65+ LLM-generated review comments across real merged PRs from [fastapi/fastapi](https://github.com/fastapi/fastapi). Address rate = percentage of AI comments that matched issues human reviewers also flagged and developers actually fixed.
+> Evaluated on 65+ LLM-generated review comments across real merged PRs from [fastapi/fastapi](https://github.com/fastapi/fastapi). Address rate = percentage of AI comments that matched issues human reviewers also flagged and developers actually fixed. Plausible = novel finds on changed code not flagged by humans.
 
 ---
 
@@ -266,8 +268,3 @@ tests/                   # Unit tests for all components
 | CRScore evaluation | NAACL 2025 | 0.54 Spearman with human judgment |
 | PR-Agent prompt design | Qodo (open source) | Industry standard patterns |
 
----
-
-## License
-
-MIT
