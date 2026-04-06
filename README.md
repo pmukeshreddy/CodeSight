@@ -11,8 +11,7 @@ ARES doesn't just find issues -- it generates fixes, writes regression tests, ru
 | Metric | ARES | CodeRabbit | Qodo | Atlassian RovoDev |
 |--------|------|------------|------|-------------------|
 | **Address Rate / Precision** | **58.3%** | 49.2% | -- | 38.7% |
-| **Verified Rate** | **100%** | -- | -- | -- |
-| **Cost per PR** | ~$0.20 | -- | -- | -- |
+
 
 > Evaluated on 65+ LLM-generated review comments across real merged PRs from [fastapi/fastapi](https://github.com/fastapi/fastapi). Address rate = percentage of AI comments that matched issues human reviewers also flagged and developers actually fixed.
 
