@@ -159,12 +159,6 @@ Token-optimized: function source trimmed to diff-adjacent lines, caller/callee c
 
 ## Quick Start
 
-### Prerequisites
-- Python 3.11+
-- Neo4j Aura (free tier works) or local Neo4j
-- Pinecone (free tier works)
-- Anthropic API key
-- GitHub token
 
 ### Environment Variables
 ```bash
