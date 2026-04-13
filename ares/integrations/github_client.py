@@ -18,9 +18,20 @@ class GitHubClient:
             raise RuntimeError("PyGithub is required for GitHub integration.")
         self.gh = Github(token)
 
-    def get_pr_data(self, repo_name: str, pr_number: int) -> dict:
+    def get_pr_data(
+        self,
+        repo_name: str,
+        pr_number: int,
+        snapshot_mode: str = "final",
+    ) -> dict:
         repo = self.gh.get_repo(repo_name)
         pr = repo.get_pull(pr_number)
+
+        if snapshot_mode == "first-human-review":
+            snapshot_sha = self.get_first_human_review_snapshot_sha(repo_name, pr_number)
+            if snapshot_sha:
+                return self._get_pr_data_for_snapshot(repo, pr, pr_number, snapshot_sha)
+
         files = list(pr.get_files())
         commits = list(pr.get_commits())
         return {
@@ -31,6 +42,8 @@ class GitHubClient:
             "base_branch": pr.base.ref,
             "head_branch": pr.head.ref,
             "head_ref": f"pull/{pr_number}/head",
+            "fetch_ref": f"pull/{pr_number}/head",
+            "checkout_sha": pr.head.sha,
             "head_sha": pr.head.sha,
             "diff": self._build_unified_diff(files),
         }
@@ -203,18 +216,27 @@ query RecentMergedPullRequests($owner: String!, $name: String!, $cursor: String)
         target.parent.mkdir(parents=True, exist_ok=True)
         self._run_git(["git", "clone", *depth_args, "--branch", branch, clone_url, str(target)])
 
-    def clone_repo_ref(self, repo_name: str, ref: str, target_dir: str, checkout_name: str = "ares-target", depth: int = 1) -> None:
+    def clone_repo_ref(
+        self,
+        repo_name: str,
+        ref: str,
+        target_dir: str,
+        checkout_name: str = "ares-target",
+        checkout_sha: str | None = None,
+        depth: int = 1,
+    ) -> None:
         target = Path(target_dir)
         clone_url = f"https://github.com/{repo_name}.git"
-        depth_args = ["--depth", str(max(1, depth))]
+        depth_args = [] if checkout_sha else ["--depth", str(max(1, depth))]
+        checkout_target = checkout_sha or "FETCH_HEAD"
         if target.exists() and (target / ".git").exists():
             self._run_git(["git", "-C", str(target), "fetch", "origin", ref, *depth_args])
-            self._run_git(["git", "-C", str(target), "checkout", "-B", checkout_name, "FETCH_HEAD"])
+            self._run_git(["git", "-C", str(target), "checkout", "-B", checkout_name, checkout_target])
             return
         target.parent.mkdir(parents=True, exist_ok=True)
         self._run_git(["git", "clone", *depth_args, "--no-checkout", clone_url, str(target)])
         self._run_git(["git", "-C", str(target), "fetch", "origin", ref, *depth_args])
-        self._run_git(["git", "-C", str(target), "checkout", "-B", checkout_name, "FETCH_HEAD"])
+        self._run_git(["git", "-C", str(target), "checkout", "-B", checkout_name, checkout_target])
 
     def _run_git(self, args: list[str]) -> subprocess.CompletedProcess:
         verbose = os.getenv("ARES_GIT_VERBOSE", "").strip().lower() in {"1", "true", "yes", "on"}
@@ -259,6 +281,53 @@ query RecentMergedPullRequests($owner: String!, $name: String!, $cursor: String)
         if suggested:
             body += f"\n\n```suggestion\n{suggested}\n```"
         return body
+
+    def get_first_human_review_snapshot_sha(self, repo_name: str, pr_number: int) -> str | None:
+        repo = self.gh.get_repo(repo_name)
+        pr = repo.get_pull(pr_number)
+        comments = [comment for comment in pr.get_review_comments() if not self._should_skip_review_comment(comment)]
+        comments.sort(
+            key=lambda comment: self._normalize_datetime(getattr(comment, "created_at", None))
+            or datetime.max.replace(tzinfo=timezone.utc)
+        )
+        if not comments:
+            return None
+        first = comments[0]
+        return (
+            getattr(first, "original_commit_id", None)
+            or getattr(first, "commit_id", None)
+            or self._latest_commit_before(repo, pr, getattr(first, "created_at", None))
+        )
+
+    def _get_pr_data_for_snapshot(self, repo, pr, pr_number: int, snapshot_sha: str) -> dict:
+        comparison = repo.compare(pr.base.sha, snapshot_sha)
+        files = list(getattr(comparison, "files", []) or [])
+        commits = list(getattr(comparison, "commits", []) or [])
+        return {
+            "title": pr.title or "",
+            "description": pr.body or "",
+            "commit_messages": [commit.commit.message for commit in commits],
+            "changed_files": [changed.filename for changed in files],
+            "base_branch": pr.base.ref,
+            "head_branch": pr.head.ref,
+            "head_ref": f"pull/{pr_number}/head",
+            "fetch_ref": f"pull/{pr_number}/head",
+            "checkout_sha": snapshot_sha,
+            "head_sha": snapshot_sha,
+            "diff": self._build_unified_diff(files),
+        }
+
+    def _latest_commit_before(self, repo, pr, created_at: datetime | None) -> str | None:
+        created_at = self._normalize_datetime(created_at)
+        commits = self._load_pr_commits(repo, pr)
+        eligible = [
+            commit
+            for commit in commits
+            if created_at is None or (
+                commit.get("committed_at") is not None and commit["committed_at"] <= created_at
+            )
+        ]
+        return eligible[-1]["sha"] if eligible else None
 
     def _load_pr_commits(self, repo, pr) -> list[dict]:
         commits: list[dict] = []

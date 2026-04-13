@@ -238,6 +238,96 @@ def test_github_client_lists_recent_merged_prs_from_graphql():
     ]
 
 
+def test_github_client_prefers_original_commit_id_for_first_human_review_snapshot():
+    client = GitHubClient.__new__(GitHubClient)
+
+    review_comments = [
+        SimpleNamespace(
+            id=1,
+            path="app.py",
+            body="Guard the payload before calling normalize.",
+            created_at=datetime(2024, 1, 2, 10, 0, tzinfo=timezone.utc),
+            original_line=10,
+            original_start_line=None,
+            line=10,
+            start_line=None,
+            in_reply_to_id=None,
+            user=SimpleNamespace(type="User", login="alice"),
+            html_url="https://example.com/comments/1",
+            original_commit_id="snapshot-sha",
+            commit_id="later-sha",
+        ),
+    ]
+
+    class FakePull:
+        def get_review_comments(self):
+            return review_comments
+
+    class FakeRepo:
+        def get_pull(self, pr_number: int):
+            assert pr_number == 42
+            return FakePull()
+
+    class FakeGitHub:
+        def get_repo(self, repo_name: str):
+            assert repo_name == "owner/repo"
+            return FakeRepo()
+
+    client.gh = FakeGitHub()
+
+    assert client.get_first_human_review_snapshot_sha("owner/repo", 42) == "snapshot-sha"
+
+
+def test_get_pr_data_uses_snapshot_diff_when_snapshot_mode_is_first_human_review():
+    client = GitHubClient.__new__(GitHubClient)
+
+    class FakePull:
+        title = "Fix auth edge case"
+        body = "Tighten empty payload handling."
+        base = SimpleNamespace(ref="main", sha="base-sha")
+        head = SimpleNamespace(ref="feature/auth-fix", sha="final-head-sha")
+
+    comparison = SimpleNamespace(
+        files=[
+            SimpleNamespace(
+                filename="app.py",
+                patch="@@ -10,1 +10,2 @@\n-old\n+new\n+extra",
+            )
+        ],
+        commits=[
+            SimpleNamespace(commit=SimpleNamespace(message="first reviewable commit")),
+        ],
+    )
+
+    class FakeRepo:
+        def get_pull(self, pr_number: int):
+            assert pr_number == 42
+            return FakePull()
+
+        def compare(self, base: str, head: str):
+            assert base == "base-sha"
+            assert head == "snapshot-sha"
+            return comparison
+
+    class FakeGitHub:
+        def get_repo(self, repo_name: str):
+            assert repo_name == "owner/repo"
+            return FakeRepo()
+
+    client.gh = FakeGitHub()
+    client.get_first_human_review_snapshot_sha = lambda repo_name, pr_number: "snapshot-sha"
+
+    pr_data = client.get_pr_data("owner/repo", 42, snapshot_mode="first-human-review")
+
+    assert pr_data["fetch_ref"] == "pull/42/head"
+    assert pr_data["checkout_sha"] == "snapshot-sha"
+    assert pr_data["head_sha"] == "snapshot-sha"
+    assert pr_data["commit_messages"] == ["first reviewable commit"]
+    assert pr_data["changed_files"] == ["app.py"]
+    assert "diff --git a/app.py b/app.py" in pr_data["diff"]
+    assert "+extra" in pr_data["diff"]
+
+
 def test_evaluator_fetches_human_comments_when_missing():
     class FakeGitHub:
         def __init__(self) -> None:

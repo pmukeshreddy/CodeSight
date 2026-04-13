@@ -7,6 +7,7 @@ from scripts.eval_comment_sample import (
     collapse_reason,
     effective_eval_max_comments,
     preflight_candidate_prs,
+    review_pr_sample,
 )
 
 
@@ -105,3 +106,65 @@ def test_effective_eval_max_comments_auto_raises_for_large_historical_runs():
     assert effective_eval_max_comments(3, 100) == 10
     assert effective_eval_max_comments(10, 100) == 10
     assert effective_eval_max_comments(3, 25) == 3
+
+
+def test_review_pr_sample_threads_snapshot_mode_to_pipeline():
+    class FakeConfig:
+        def __init__(self) -> None:
+            self.max_comments = 3
+            self.llm_api_key = ""
+            self.model = "test-model"
+            self.provider = "anthropic"
+
+    class FakePipeline:
+        def __init__(self) -> None:
+            self.config = FakeConfig()
+            self.github = object()
+            self.snapshot_modes: list[str] = []
+            self.last_review_summary = {"target_count": 1}
+
+        def review_pr(
+            self,
+            repo_name: str,
+            pr_number: int,
+            target_dir: str | None = None,
+            snapshot_mode: str = "final",
+        ) -> list[dict]:
+            assert repo_name == "owner/repo"
+            assert pr_number == 42
+            assert target_dir == "/tmp/pr-42"
+            self.snapshot_modes.append(snapshot_mode)
+            return [
+                {
+                    "file": "app.py",
+                    "line_start": 10,
+                    "line_end": 10,
+                    "comment": "Guard the payload before calling normalize.",
+                    "suggested_code": "payload = payload or ''",
+                }
+            ]
+
+    pipeline = FakePipeline()
+
+    result = review_pr_sample(
+        workspace_root="/tmp/workspace",
+        repo_name="owner/repo",
+        pr_number=42,
+        target_dir="/tmp/pr-42",
+        human_comments=[
+            {
+                "file": "app.py",
+                "line_start": 10,
+                "line_end": 10,
+                "comment": "Guard the payload before calling normalize.",
+                "addressed": True,
+            }
+        ],
+        max_comments_per_pr=5,
+        pipeline=pipeline,
+        snapshot_mode="first-human-review",
+    )
+
+    assert pipeline.snapshot_modes == ["first-human-review"]
+    assert pipeline.config.max_comments == 3
+    assert result["status"] == "ok"

@@ -109,23 +109,41 @@ class Pipeline:
         self.graph_query = self._make_graph_query()
         self.investigator = Investigator(self.graph_query, repo_path)
 
-    def review_pr(self, repo_name: str, pr_number: int, target_dir: str | None = None) -> list[dict]:
+    def review_pr(
+        self,
+        repo_name: str,
+        pr_number: int,
+        target_dir: str | None = None,
+        snapshot_mode: str = "final",
+    ) -> list[dict]:
         if self.github is None:
             raise RuntimeError("GITHUB_TOKEN is required for PR review.")
         self._active_repo_name = repo_name
         _t0 = time.perf_counter()
-        pr_data = self.github.get_pr_data(repo_name, pr_number)
+        pr_data = self.github.get_pr_data(
+            repo_name,
+            pr_number,
+            snapshot_mode=snapshot_mode,
+        )
         _log(pr_number, "get_pr_data", _t0)
 
         clone_dir = target_dir or os.path.join(
             self.config.workspace_root,
             repo_name.replace("/", "__"),
         )
-        clone_ref = pr_data.get("head_ref") or pr_data["head_branch"]
+        fetch_ref = pr_data.get("fetch_ref") or pr_data.get("head_ref") or pr_data["head_branch"]
+        checkout_sha = pr_data.get("checkout_sha")
         _t = time.perf_counter()
         clone_depth = int(os.getenv("ARES_CLONE_DEPTH", "1"))
         if hasattr(self.github, "clone_repo_ref"):
-            self.github.clone_repo_ref(repo_name, clone_ref, clone_dir, checkout_name=f"ares-pr-{pr_number}", depth=clone_depth)
+            self.github.clone_repo_ref(
+                repo_name,
+                fetch_ref,
+                clone_dir,
+                checkout_name=f"ares-pr-{pr_number}",
+                checkout_sha=checkout_sha,
+                depth=clone_depth,
+            )
         else:
             self.github.clone_repo(repo_name, pr_data["head_branch"], clone_dir, depth=clone_depth)
         _log(pr_number, "clone", _t)

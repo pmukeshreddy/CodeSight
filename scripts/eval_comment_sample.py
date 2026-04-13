@@ -77,6 +77,12 @@ def build_parser() -> argparse.ArgumentParser:
         default="main",
         help="Branch to use for the shared base graph (e.g. main, master).",
     )
+    parser.add_argument(
+        "--snapshot-mode",
+        default="final",
+        choices=["final", "first-human-review"],
+        help="Review the latest PR state or the first human-reviewed snapshot.",
+    )
     return parser
 
 
@@ -147,6 +153,7 @@ def main(argv: list[str] | None = None) -> int:
         candidate_review_counts=candidate_review_counts,
         max_comments_per_pr=eval_max_comments,
         parallelism=max(1, int(args.parallelism)),
+        snapshot_mode=args.snapshot_mode,
     )
     result["repo_name"] = args.repo
     result["target_comments"] = max(1, int(args.target_comments))
@@ -370,6 +377,7 @@ def sample_comment_metrics(
     candidate_review_counts: dict[int, int] | None = None,
     max_comments_per_pr: int | None = None,
     parallelism: int = 1,
+    snapshot_mode: str = "final",
 ) -> dict:
     clone_root.mkdir(parents=True, exist_ok=True)
     prefetched_ground_truth = prefetched_ground_truth or {}
@@ -409,6 +417,7 @@ def sample_comment_metrics(
                 prefetched_ground_truth.get(pr_number, []),
                 max_comments_per_pr or config.max_comments,
                 pipeline=shared_pipeline,
+                snapshot_mode=snapshot_mode,
             )
         except Exception as exc:  # pragma: no cover - network/runtime dependent
             progress(f"PR #{pr_number}: failed with {exc}.")
@@ -520,6 +529,7 @@ def review_pr_sample(
     human_comments: list[dict],
     max_comments_per_pr: int,
     pipeline: Pipeline | None = None,
+    snapshot_mode: str = "final",
 ) -> dict:
     start = time.time()
     if pipeline is None:
@@ -546,7 +556,12 @@ def review_pr_sample(
         }
     old_max = pipeline.config.max_comments
     pipeline.config.max_comments = max(1, int(max_comments_per_pr))
-    comments = pipeline.review_pr(repo_name, pr_number, target_dir=target_dir)
+    comments = pipeline.review_pr(
+        repo_name,
+        pr_number,
+        target_dir=target_dir,
+        snapshot_mode=snapshot_mode,
+    )
     pipeline.config.max_comments = old_max
     review_summary = dict(getattr(pipeline, "last_review_summary", {}) or {})
     if not comments:
