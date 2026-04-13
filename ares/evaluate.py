@@ -49,6 +49,7 @@ class Evaluator:
                 batch_results = self.pipeline.batch_review_prs(batch_configs)
                 for (idx, _), comments in zip(prs_needing_review, batch_results):
                     test_prs[idx]["our_comments"] = comments
+                    
         for pr_data in test_prs:
             repo_name = pr_data["repo_name"]
             pr_number = pr_data["pr_number"]
