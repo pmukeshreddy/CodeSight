@@ -5,6 +5,7 @@ from ares.feedback import ReviewStrategy
 
 
 def test_seeded_nit_matches_normalized_substring_patterns():
+    
     critic = Critic()
 
     assert critic._is_seeded_nit("Consider renaming `payload_value` to `payload` for clarity.")
