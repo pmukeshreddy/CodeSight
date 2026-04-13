@@ -42,6 +42,7 @@ class Pipeline:
             index_name=config.pinecone_index_name,
             namespace=config.pinecone_namespace,
         )
+        
         self.neo4j = Neo4jClient(
             uri=config.neo4j_uri,
             user=config.neo4j_user,
